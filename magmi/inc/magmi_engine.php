@@ -508,7 +508,28 @@ abstract class Magmi_Engine extends DbHelper
                 $user = $default_setup->username;
                 $pass = $default_setup->password;
                 $port = $default_setup->port;
-            } else {
+            }else if($conn == 'envphp'){ //berto - scraping env.php
+				$baseDir = $this->getProp('MAGENTO', 'basedir');
+                $envPath = $baseDir.'/app/etc/env.php';
+                if (!file_exists($envPath)) {
+                    throw new Exception("Cannot load xml from path '$envPath'");
+                }
+				$content = rtrim(file_get_contents($envPath));
+				$db_info = array();
+				preg_match("/'host'\s*=>\s*'\w*'/",$content,$db_info['host'] );
+				preg_match("/'username'\s*=>\s*'\w*'/",$content,$db_info['username'] );
+				preg_match("/'dbname'\s*=>\s*'\w*'/",$content,$db_info['dbname'] );
+				preg_match("/'password'\s*=>\s*'\w*'/",$content,$db_info['password'] );
+				foreach($db_info as $infoname => $infodata){
+					$tmp_array = explode("=>", $infodata[0]);
+					$db_info[$infoname] = trim($tmp_array[1]);
+				}
+                $host = $db_info['host'];
+                $dbname = $db_info['dbname'];
+                $user = $db_info['username'];
+                $pass = $db_info['password'];
+                $port = '3306';
+			}else {
                 $host = $this->getProp("DATABASE", "host", "localhost");
                 $dbname = $this->getProp("DATABASE", "dbname", "magento");
                 $user = $this->getProp("DATABASE", "user");
