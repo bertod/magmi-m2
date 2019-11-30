@@ -509,7 +509,7 @@ abstract class Magmi_Engine extends DbHelper
                 $pass = $default_setup->password;
                 $port = $default_setup->port;
 				
-            }else if($conn == 'envphp'){ //bertod - get env.php
+            }elseif($conn == 'envphp'){ //bertod - get env.php
 				$baseDir = $this->getProp('MAGENTO', 'basedir');
                 $envPath = $baseDir.'/app/etc/env.php';
                 if (!file_exists($envPath)) {
