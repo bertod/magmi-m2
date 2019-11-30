@@ -510,13 +510,13 @@ abstract class Magmi_Engine extends DbHelper
                 $port = $default_setup->port;
 				
             }elseif($conn == 'envphp'){ //bertod - get env.php
-				$baseDir = $this->getProp('MAGENTO', 'basedir');
+                $baseDir = $this->getProp('MAGENTO', 'basedir');
                 $envPath = $baseDir.'/app/etc/env.php';
                 if (!file_exists($envPath)) {
-                    throw new Exception("Cannot load xml from path '$envPath'");
+                   throw new Exception("Cannot load xml from path '$envPath'");
                 }
-				$env_array = include $envPath;
-				$host = $env_array['db']['connection']['default']['host'];
+                $env_array = include $envPath;
+                $host = $env_array['db']['connection']['default']['host'];
                 $dbname = $env_array['db']['connection']['default']['dbname'];
                 $user = $env_array['connection']['default']['username'];
                 $pass = $env_array['connection']['default']['password'];
