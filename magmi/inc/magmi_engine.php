@@ -391,7 +391,7 @@ abstract class Magmi_Engine extends DbHelper
         $this->_excid++;
         $trstr = "";
         //FIXME: infinity loop in M2
-        /*foreach ($traces as $trace) {
+        foreach ($traces as $trace) {
             if (isset($trace["file"])) {
                 $fname = str_replace(dirname(dirname(__FILE__)), "", $trace["file"]);
                 $trstr .= $fname . ":" . (isset($trace["line"]) ? $trace["line"] : "?") . " - ";
@@ -407,7 +407,7 @@ abstract class Magmi_Engine extends DbHelper
                     $trstr .= "\n";
                 }
             }
-        }*/
+        }
         if (!isset($this->_exceptions[$tk])) {
             $this->_exceptions[$tk] = array(0,$this->_excid);
         }
@@ -508,26 +508,21 @@ abstract class Magmi_Engine extends DbHelper
                 $user = $default_setup->username;
                 $pass = $default_setup->password;
                 $port = $default_setup->port;
-            }else if($conn == 'envphp'){ //berto - scraping env.php
-				$baseDir = $this->getProp('MAGENTO', 'basedir');
-                //$envPath = $baseDir.'/app/etc/env.php';
-                $envPath = dirname(__FILE__)."/../../app/etc/env.php";
-                //$envPath = $baseDir.'/app/etc/env.php';
+				
+            }elseif($conn == 'envphp'){ //bertod - get env.php
+                $baseDir = $this->getProp('MAGENTO', 'basedir');
+                $envPath = $baseDir.'/app/etc/env.php';
                 if (!file_exists($envPath)) {
-                    throw new Exception("Cannot load xml from path '$envPath'");
+                   throw new Exception("Cannot load xml from path '$envPath'");
                 }
-                //$env_array = include dirname(__FILE__)."/../../app/etc/env.php";
-				$env_array = include $envPath;
-				//$host = $GLOBALS['env_array']['db']['connection']['default']['host'];
-				$host = $env_array['db']['connection']['default']['host'];
-                //$dbname = $GLOBALS['env_array']['db']['connection']['default']['dbname'];
+                $env_array = include $envPath;
+                $host = $env_array['db']['connection']['default']['host'];
                 $dbname = $env_array['db']['connection']['default']['dbname'];
-                //$user = $GLOBALS['env_array']['db']['connection']['default']['username'];
-                $user = $env_array['db']['connection']['default']['username'];
-                //$pass = $GLOBALS['env_array']['db']['connection']['default']['password'];
-                $pass = $env_array['db']['connection']['default']['password'];
+                $user = $env_array['connection']['default']['username'];
+                $pass = $env_array['connection']['default']['password'];
                 $port = '3306';
-			}else {
+				
+			} else {
                 $host = $this->getProp("DATABASE", "host", "localhost");
                 $dbname = $this->getProp("DATABASE", "dbname", "magento");
                 $user = $this->getProp("DATABASE", "user");
