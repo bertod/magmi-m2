@@ -390,8 +390,9 @@ abstract class Magmi_Engine extends DbHelper
     {
         $this->_excid++;
         $trstr = "";
-        //FIXME: infinity loop in M2
-        /*foreach ($traces as $trace) {
+        //todo: improve infinity loop handling in M2
+        $counter = 0;
+        foreach ($traces as $trace) {
             if (isset($trace["file"])) {
                 $fname = str_replace(dirname(dirname(__FILE__)), "", $trace["file"]);
                 $trstr .= $fname . ":" . (isset($trace["line"]) ? $trace["line"] : "?") . " - ";
@@ -407,7 +408,11 @@ abstract class Magmi_Engine extends DbHelper
                     $trstr .= "\n";
                 }
             }
-        }*/
+            // simple max trace depth fix
+            if (++$counter % 20 === 0) {
+                break;
+            }
+        }
         if (!isset($this->_exceptions[$tk])) {
             $this->_exceptions[$tk] = array(0, $this->_excid);
         }
