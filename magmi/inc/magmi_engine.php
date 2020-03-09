@@ -33,7 +33,7 @@ abstract class Magmi_Engine extends DbHelper
      */
     public function getEngineInfo()
     {
-        return array("name"=>"Generic Magmi Engine","version"=>"1.1","author"=>"dweeves");
+        return array("name" => "Generic Magmi Engine", "version" => "1.1", "author" => "dweeves");
     }
 
     /**
@@ -278,7 +278,7 @@ abstract class Magmi_Engine extends DbHelper
         if ($order < 0) {
             $order += count($this->_activeplugins[$family]);
         }
-        
+
         if (is_array($this->_activeplugins) && isset($this->_activeplugins[$family]) && isset($this->_activeplugins[$family][$order]))
             return $this->_activeplugins[$family][$order];
     }
@@ -289,7 +289,7 @@ abstract class Magmi_Engine extends DbHelper
     public function callPlugins($types, $callback, &$data = null, $params = null, $break = true)
     {
         $result = true;
-      //  $tclass=get_class($this);
+        //  $tclass=get_class($this);
         // If plugin type list is not an array , process it as string
         if (!is_array($types)) {
             // If plugin is not wildcard , build array of types based on comma separated string
@@ -301,7 +301,7 @@ abstract class Magmi_Engine extends DbHelper
         }
 
         // Timing initialization (global processing step)
-       // $this->_timecounter->initTime($callback, get_class($this));
+        // $this->_timecounter->initTime($callback, get_class($this));
 
         // Iterate on plugin types (families)
         foreach ($types as $ptype) {
@@ -309,7 +309,7 @@ abstract class Magmi_Engine extends DbHelper
             if (isset($this->_activeplugins[$ptype])) {
                 // For all instances in the family
                 foreach ($this->_activeplugins[$ptype] as $pinst) {
-                    $pclass=get_class($pinst);
+                    $pclass = get_class($pinst);
                     // If the plugin has a hook for the defined processing step
                     if (method_exists($pinst, $callback)) {
                         // Timing initialization for current plugin in processing step
@@ -332,7 +332,7 @@ abstract class Magmi_Engine extends DbHelper
                             // Call the plugin processing loop callback , time it
                             //$this->_timecounter->initTime($callback, $pclass);
                             $this->$cb($pinst, $data, $result);
-                           // $this->_timecounter->exitTime($callback, $pclass);
+                            // $this->_timecounter->exitTime($callback, $pclass);
                         }
                         // if last result plugin is false & break flag
                         if ($result === false && $break) {
@@ -409,11 +409,11 @@ abstract class Magmi_Engine extends DbHelper
             }
         }*/
         if (!isset($this->_exceptions[$tk])) {
-            $this->_exceptions[$tk] = array(0,$this->_excid);
+            $this->_exceptions[$tk] = array(0, $this->_excid);
         }
         $this->_exceptions[$tk][0]++;
         $trstr = "************************************\n$tk\n*************************************\n$trstr";
-        return array($trstr,$this->_exceptions[$tk][0] == 1,$this->_exceptions[$tk][1]);
+        return array($trstr, $this->_exceptions[$tk][0] == 1, $this->_exceptions[$tk][1]);
     }
 
     public function trace($e, $data = "")
@@ -497,7 +497,7 @@ abstract class Magmi_Engine extends DbHelper
             $socket = $this->getProp("DATABASE", "unix_socket");
             if ($conn == 'localxml') {
                 $baseDir = $this->getProp('MAGENTO', 'basedir');
-                $xmlPath = $baseDir.'/app/etc/local.xml';
+                $xmlPath = $baseDir . '/app/etc/local.xml';
                 if (!file_exists($xmlPath)) {
                     throw new Exception("Cannot load xml from path '$xmlPath'");
                 }
@@ -508,26 +508,18 @@ abstract class Magmi_Engine extends DbHelper
                 $user = $default_setup->username;
                 $pass = $default_setup->password;
                 $port = $default_setup->port;
-            }else if($conn == 'envphp'){ //berto - scraping env.php
-				$baseDir = $this->getProp('MAGENTO', 'basedir');
-                //$envPath = $baseDir.'/app/etc/env.php';
-                $envPath = dirname(__FILE__)."/../../app/etc/env.php";
-                //$envPath = $baseDir.'/app/etc/env.php';
+            } else if ($conn == 'envphp') { //berto - scraping env.php
+                $envPath = dirname(__FILE__) . "/../../app/etc/env.php";
                 if (!file_exists($envPath)) {
                     throw new Exception("Cannot load xml from path '$envPath'");
                 }
-                //$env_array = include dirname(__FILE__)."/../../app/etc/env.php";
-				$env_array = include $envPath;
-				//$host = $GLOBALS['env_array']['db']['connection']['default']['host'];
-				$host = $env_array['db']['connection']['default']['host'];
-                //$dbname = $GLOBALS['env_array']['db']['connection']['default']['dbname'];
+                $env_array = include $envPath;
+                $host = $env_array['db']['connection']['default']['host'];
                 $dbname = $env_array['db']['connection']['default']['dbname'];
-                //$user = $GLOBALS['env_array']['db']['connection']['default']['username'];
                 $user = $env_array['db']['connection']['default']['username'];
-                //$pass = $GLOBALS['env_array']['db']['connection']['default']['password'];
                 $pass = $env_array['db']['connection']['default']['password'];
                 $port = '3306';
-			}else {
+            } else {
                 $host = $this->getProp("DATABASE", "host", "localhost");
                 $dbname = $this->getProp("DATABASE", "dbname", "magento");
                 $user = $this->getProp("DATABASE", "user");
@@ -539,6 +531,7 @@ abstract class Magmi_Engine extends DbHelper
             $this->_db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
         }
     }
+
     /*
      * Disconnect Magento db
      */
