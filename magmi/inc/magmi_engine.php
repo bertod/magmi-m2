@@ -513,17 +513,18 @@ abstract class Magmi_Engine extends DbHelper
                 $user = $default_setup->username;
                 $pass = $default_setup->password;
                 $port = $default_setup->port;
-            } else if ($conn == 'envphp') { //berto - scraping env.php
+            } else if ($conn === 'envphp') {
                 $envPath = dirname(__FILE__) . "/../../app/etc/env.php";
                 if (!file_exists($envPath)) {
                     throw new Exception("Cannot load xml from path '$envPath'");
                 }
                 $env_array = include $envPath;
-                $host = $env_array['db']['connection']['default']['host'];
+                $host_array = explode(":",$env_array['db']['connection']['default']['host']);
+                $host = $host_array[0];
+                $port = isset($host_array[1]) ? $host_array[1] : '3306';
                 $dbname = $env_array['db']['connection']['default']['dbname'];
                 $user = $env_array['db']['connection']['default']['username'];
                 $pass = $env_array['db']['connection']['default']['password'];
-                $port = '3306';
             } else {
                 $host = $this->getProp("DATABASE", "host", "localhost");
                 $dbname = $this->getProp("DATABASE", "dbname", "magento");
