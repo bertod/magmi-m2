@@ -279,8 +279,9 @@ abstract class Magmi_Engine extends DbHelper
             $order += count($this->_activeplugins[$family]);
         }
 
-        if (is_array($this->_activeplugins) && isset($this->_activeplugins[$family]) && isset($this->_activeplugins[$family][$order]))
+        if (is_array($this->_activeplugins) && isset($this->_activeplugins[$family]) && isset($this->_activeplugins[$family][$order])) {
             return $this->_activeplugins[$family][$order];
+        }
     }
 
     /*
